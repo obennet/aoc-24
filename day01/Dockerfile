@@ -1,8 +1,17 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine as builder
-WORKDIR /aoc
-COPY ./day01.csproj .
-RUN dotnet restore -r linux-musl-x64
-COPY ./input.txt .
-COPY ./Program.cs .
-RUN dotnet build --no-restore -c Release -r linux-musl-x64
-CMD dotnet run --no-build -c Release -r linux-musl-x64
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+
+# Install NativeAOT build prerequisites
+RUN apt-get update && apt-get install -y --no-install-recommends \
+       clang \
+       zlib1g-dev
+
+WORKDIR /source
+COPY day01.csproj .
+COPY input.txt .
+COPY Program.cs .
+RUN dotnet publish -c Release -o publish --use-current-runtime -p:"PublishAot=true;StripSymbols=true;IlcOptimizationPreference=Speed"
+
+FROM mcr.microsoft.com/dotnet/runtime-deps:9.0
+WORKDIR /app
+COPY --from=build /source/publish .
+ENTRYPOINT [ "./day01" ]

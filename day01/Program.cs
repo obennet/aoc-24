@@ -1,6 +1,4 @@
-﻿using System.Runtime.ExceptionServices;
-
-StreamReader sr = new("./input.txt");
+﻿StreamReader sr = new("./input.txt");
 string? line = sr.ReadLine();
 List<int> left = [];
 List<int> right = [];
@@ -16,8 +14,8 @@ sr.Close();
 var part = Environment.GetEnvironmentVariable("part");
 var solution = part switch
 {
-    "part1" => Part1(left, right),
-    "part2" => Part2(left, right),
+    "part1" => Part1(left, right), // 1666427
+    "part2" => Part2(left, right), // 24316233
     _ => throw new ArgumentOutOfRangeException(nameof(part), $"Unexpected {nameof(part)} value: '{part}'")
 };
 
@@ -40,18 +38,18 @@ int Part1(List<int> left, List<int> right)
 int Part2(List<int> left, List<int> right)
 {
     IEnumerable<IGrouping<int, int>> groupedRight = right.GroupBy(i => i);
-    Dictionary<string, int> counts = [];
+    Dictionary<int, int> counts = [];
     int score = 0;
 
     foreach (var group in groupedRight)
     {
-        counts.Add("" + group.Key, group.Count());
+        counts.Add(group.Key, group.Count());
     }
     foreach (int l in left)
     {
-        if (counts.ContainsKey("" + l))
+        if (counts.ContainsKey(l))
         {
-            score += l * counts["" + l];
+            score += l * counts[l];
         }
     }
     return score;
