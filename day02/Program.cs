@@ -4,7 +4,7 @@ var part = Environment.GetEnvironmentVariable("part");
 var solution = part switch
 {
     "part1" => Part1(sr), //220
-    "part2" => Part2(sr),
+    "part2" => Part2(sr), //296
     _ => throw new ArgumentOutOfRangeException(nameof(part), $"Unexpected {nameof(part)} value: '{part}'")
 };
 
