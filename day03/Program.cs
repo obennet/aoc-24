@@ -1,13 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-StreamReader sr = new("./input.txt");
-string? line = sr.ReadLine();
-string input = "";
-while (line != null)
-{
-    input += line;
-    line = sr.ReadLine();
-}
+string input = File.ReadAllText("./input.txt");
 
 var part = Environment.GetEnvironmentVariable("part");
 var solution = part switch
